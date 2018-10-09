@@ -6,13 +6,12 @@
 % 2018/10/9.
 % -----------------------------------------------------------
 
-% -------------------------------------------
-% Step 1: Import data automatically.
+% Step 1-1: Import data automatically.
 % A=load('data.txt'); % load data to matrix A
 % x=A(:,1); % read x from matrix A
 % y=A(:,2); % read y from matrix A
-% -------------------------------------------
-% Step 1: Or import data manually, e.g. from Origin.
+
+% Step 1-2: Or import data manually, e.g. from Origin.
 x=[]';
 y=[]';
 
