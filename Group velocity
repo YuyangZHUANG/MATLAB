@@ -17,8 +17,8 @@ x=[]';
 y=[]';
 
 % Step 2: Curve fitting.
-a=polyfit(x,y,3); % fitting number can be changed.
-xx=min(x):0.1:max(x); % spacing number can be changed.
+a=polyfit(x,y,3); % fitting number '3' can be changed.
+xx=min(x):0.1:max(x); % spacing number '0.1' can be changed.
 yy=polyval(a,xx); 
 
 % Step 3: Derivation.
@@ -27,3 +27,4 @@ xxx=xx(1:length(xx)-1);
 
 % Step 4: Figure.
 plot(xxx,yyy);
+% End
