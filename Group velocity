@@ -1,10 +1,10 @@
-% -----------------------------------------------------------
+% ---------------------------------------------------------------
 % MATLAB
-% This file is to calculate group velocity of PhC waveguide.
+% This .txt file is to calculate group velocity of PhC waveguide.
 % Written by Yuyang ZHUANG.
 % Tanabe Lab at Keio University.
 % 2018/10/9.
-% -----------------------------------------------------------
+% ---------------------------------------------------------------
 
 % Step 1-1: Import data automatically.
 % A=load('data.txt'); % load data to matrix A
