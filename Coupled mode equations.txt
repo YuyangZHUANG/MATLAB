@@ -1,0 +1,74 @@
+% ---------------------------------------------------------------
+% MATLAB
+% This .txt file is to calculate coupled mode theory.
+% Written by Yuyang ZHUANG.
+% Tanabe Lab at Keio University.
+% 2018/10/23.
+% ---------------------------------------------------------------
+
+% The coupled differential equations are as follows (three modes)
+% dA1(z)/dz=-j*b1*A1(z)+j*K12*A2(z)+j*K13*A3(z)
+% dA2(z)/dz=-j*b2*A2(z)+j*K21*A1(z)+j*K32*A3(z)
+% dA3(z)/dz=-j*b3*A3(z)+j*K13*A1(z)+j*K23*A2(z)
+% K12=K21*=c1, K13=K31*=c2.
+% Ignore the coupling between A2(z) and A3(z), means K23=K32*=0.
+
+% The equations above can be simplified as
+% dA1(z)/dz=-j*b1*A1(z)+j*c1*A2(z)+j*c2*A3(z)
+% dA2(z)/dz=-j*b2*A2(z)+j*c1*A1(z)
+% dA3(z)/dz=-j*b3*A3(z)+j*c2*A1(z)
+
+% Assume that b1=b2=27μm-1, b3=27μm-1
+% c1=c2=0.1μm-1
+
+% Step 1: Set the coupled mode equations
+A=[-27i,0.1i,0.1i;0.1i,-27i,0;0.1i,0,-27i];
+Eqns=@(t,X) A*X;
+% Step 2: Set the innitial condition A1(0)=1, A2(0)=0, A3(0)=0.
+X0=[1;0;0];
+options=odeset('RelTol',1E-8,'AbsTol',1E-8);
+% Step 3: Calculate the equations using numerical solver ode45
+[t,A]=ode45(Eqns,[0 20],X0,options);
+% Step 4: Plot the power of A1(z), A2(z) and A3(z).
+plot(t,abs(A(:,1)).^2)
+hold on;
+plot(t,abs(A(:,2)).^2,'r')
+hold on;
+plot(t,abs(A(:,3)).^2,'g--')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
