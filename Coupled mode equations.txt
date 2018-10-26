@@ -36,6 +36,8 @@ plot(t,abs(A(:,2)).^2,'r')
 hold on;
 plot(t,abs(A(:,3)).^2,'g--')
 
+% End
+
 
 
 
