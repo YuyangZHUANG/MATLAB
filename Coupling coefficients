@@ -230,7 +230,7 @@ kappa2(M-128)=kappa2(M-128)*10^-6; %transform to um^-1
 
 % Gap distance 		
 g(M-128)=M*dx-(0.3e-6+0.6e-6);	
-g=g*10^9; % transform to nm
+g(M-128)=g(M-128)*10^9; % transform to nm
 
 end
 
