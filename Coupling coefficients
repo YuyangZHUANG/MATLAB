@@ -88,7 +88,7 @@ for i=1:1:1000000
 	end
 end
 
-%% Creat new matrix for Ex Ey Ez for simplifying calculation.
+%% Creat new matrix for Ex Ey Ez to simplify calculation.
 % New electric field matrix (name NE)
 NEx_TE0_W1=zeros(1000,1000);
 NEy_TE0_W1=zeros(1000,1000);
