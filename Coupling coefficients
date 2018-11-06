@@ -1,0 +1,243 @@
+% ---------------------------------------------------------------
+% MATLAB
+% This .txt file is to calculate coupling coefficients.
+% Written by Yuyang ZHUANG.
+% Tanabe Lab at Keio University.
+% 2018/11/6.
+% ---------------------------------------------------------------
+
+% Define parameters.
+lambda                 = 1.55*10^-6;          % wavelength
+c                      = 3*10^8;              % speed of light
+omega                  = 2*pi*c/lambda;       % angular frequency
+n_s                    = 3.4;                 % refractive index (silicon)
+n_0                    = 1;                   % refractive index (air)
+k_0                    = 2*pi/lambda;         % wavevector in the air
+eps_0                  = 8.85*10^-12;         % permittivity of vacuum
+mu_0                   = 1.25*10^-6;          % magnetic permeability of vacuum
+x_calculation_area     = 6.993*10^-6;         % calculating region (x-axis)
+y_calculation_area     = 6.993*10^-6;         % calculating region (y-axis)
+
+% Load data from COMSOL. Each file has 1000*1000 samples.
+realE_TE0_W1=load('E://realE_TE0_W1.txt');    % real component of TE0 mode in W1
+imagE_TE0_W1=load('E://imagE_TE0_W1.txt');    % imag component of TE0 mode in W1
+realE_TE0_W2=load('E://realE_TE0_W2.txt');    % real component of TE0 mode in W2
+imagE_TE0_W2=load('E://imagE_TE0_W2.txt');    % imag component of TE0 mode in W2
+realE_TE1_W2=load('E://realE_TE1_W2.txt');    % real component of TE1 mode in W2
+imagE_TE1_W2=load('E://imagE_TE1_W2.txt');    % imag component of TE1 mode in W2
+
+% Grid data (x position & y position of samples).
+grid=realE_TE0_W1(:,1:2);
+
+%% TE0_W1 electric field data.
+% real component
+realEx_TE0_W1=realE_TE0_W1(:,3);
+realEy_TE0_W1=realE_TE0_W1(:,4);
+realEz_TE0_W1=realE_TE0_W1(:,5);
+% imag component
+imagEx_TE0_W1=imagE_TE0_W1(:,3);
+imagEy_TE0_W1=imagE_TE0_W1(:,4);
+imagEz_TE0_W1=imagE_TE0_W1(:,5);
+% combination
+Ex_TE0_W1=complex(realEx_TE0_W1,imagEx_TE0_W1);
+Ey_TE0_W1=complex(realEy_TE0_W1,imagEy_TE0_W1);
+Ez_TE0_W1=complex(realEz_TE0_W1,imagEz_TE0_W1);
+
+%% TE0_W2 electric field data
+% real component
+realEx_TE0_W2=realE_TE0_W2(:,3);
+realEy_TE0_W2=realE_TE0_W2(:,4);
+realEz_TE0_W2=realE_TE0_W2(:,5);
+% imag component
+imagEx_TE0_W2=imagE_TE0_W2(:,3);
+imagEy_TE0_W2=imagE_TE0_W2(:,4);
+imagEz_TE0_W2=imagE_TE0_W2(:,5);
+% combination
+Ex_TE0_W2=complex(realEx_TE0_W2,imagEx_TE0_W2);
+Ey_TE0_W2=complex(realEy_TE0_W2,imagEy_TE0_W2);
+Ez_TE0_W2=complex(realEz_TE0_W2,imagEz_TE0_W2);
+
+%% TE1_W2 electric field data
+% real component
+realEx_TE1_W2=realE_TE1_W2(:,3);
+realEy_TE1_W2=realE_TE1_W2(:,4);
+realEz_TE1_W2=realE_TE1_W2(:,5);
+% imag component
+imagEx_TE1_W2=imagE_TE1_W2(:,3);
+imagEy_TE1_W2=imagE_TE1_W2(:,4);
+imagEz_TE1_W2=imagE_TE1_W2(:,5);
+% combination
+Ex_TE1_W2=complex(realEx_TE1_W2,imagEx_TE1_W2);
+Ey_TE1_W2=complex(realEy_TE1_W2,imagEy_TE1_W2);
+Ez_TE1_W2=complex(realEz_TE1_W2,imagEz_TE1_W2);
+
+% Define refractive index of W1 and W2. 
+% The material of the waveguides is silicon (n_si=3.4).
+n_W1=zeros(1000000,1);
+n_W2=zeros(1000000,1);
+for i=1:1:1000000
+	n_W1(i,1)=1;
+	n_W2(i,1)=1;
+end
+for i=1:1:1000000
+	if (abs(grid(i,1))<=0.3) && (abs(grid(i,2))<=0.11) % W1 guide: width 600nm, thickness 220nm.
+		n_W1(i,1)=3.4;
+	end
+	if (abs(grid(i,1))<=0.6) && (abs(grid(i,2))<=0.11) % W2 guide: width 1200nm, thickness 220nm.
+		n_W2(i,1)=3.4;
+	end
+end
+
+%% Creat new matrix for Ex Ey Ez for simplifying calculation.
+% New electric field matrix (name NE)
+NEx_TE0_W1=zeros(1000,1000);
+NEy_TE0_W1=zeros(1000,1000);
+NEz_TE0_W1=zeros(1000,1000);
+NEx_TE0_W2=zeros(1000,1000);
+NEy_TE0_W2=zeros(1000,1000);
+NEz_TE0_W2=zeros(1000,1000);
+NEx_TE1_W2=zeros(1000,1000);
+NEy_TE1_W2=zeros(1000,1000);
+NEz_TE1_W2=zeros(1000,1000);
+
+% New refractive index matrix (name Nn)
+Nn_W1=zeros(1000,1000);
+Nn_W2=zeros(1000,1000);
+
+
+for i=1:1:1000
+	for j=1:1:1000
+		% NExyz_TE0_W1
+		NEx_TE0_W1(i,j)=Ex_TE0_W1(i+(j-1)*1000);
+		NEy_TE0_W1(i,j)=Ey_TE0_W1(i+(j-1)*1000);
+		NEz_TE0_W1(i,j)=Ez_TE0_W1(i+(j-1)*1000);
+		% NExyz_TE0_W2
+		NEx_TE0_W2(i,j)=Ex_TE0_W2(i+(j-1)*1000);
+		NEy_TE0_W2(i,j)=Ey_TE0_W2(i+(j-1)*1000);
+		NEz_TE0_W2(i,j)=Ez_TE0_W2(i+(j-1)*1000);
+		% NExyz_TE1_W2
+		NEx_TE1_W2(i,j)=Ex_TE1_W2(i+(j-1)*1000);
+		NEy_TE1_W2(i,j)=Ey_TE1_W2(i+(j-1)*1000);
+		NEz_TE1_W2(i,j)=Ez_TE1_W2(i+(j-1)*1000);
+		% refractive index
+		Nn_W1(i,j)=n_W1(i+(j-1)*1000);
+		Nn_W2(i,j)=n_W2(i+(j-1)*1000);
+	end
+end
+
+% Calculate normalized factor.
+dx=x_calculation_area/(1000-1); % 1000 samples in a-aixs
+dy=y_calculation_area/(1000-1); % 1000 samples in y-aixs
+N_TE0_W1=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W1.*(abs(Ex_TE0_W1).^2+abs(Ey_TE0_W1).^2+abs(Ez_TE0_W1).^2)*dx*dy))));
+N_TE0_W2=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W2.*(abs(Ex_TE0_W2).^2+abs(Ey_TE0_W2).^2+abs(Ez_TE0_W2).^2)*dx*dy))));
+N_TE1_W2=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W2.*(abs(Ex_TE1_W2).^2+abs(Ey_TE1_W2).^2+abs(Ez_TE1_W2).^2)*dx*dy))));
+
+% Creat extended matrix for multiplying e1 and (e2*), setting the extended number as M.
+% minimum M is 129, with gap distance 3nm.
+% Loop of M:
+for M=129:1:229
+% Extend matrix (name ENE and ENn)
+ENEx_TE0_W1=zeros(1000+M,1000);
+ENEy_TE0_W1=zeros(1000+M,1000);
+ENEz_TE0_W1=zeros(1000+M,1000);
+ENEx_TE0_W2=zeros(1000+M,1000);
+ENEy_TE0_W2=zeros(1000+M,1000);
+ENEz_TE0_W2=zeros(1000+M,1000);
+ENEx_TE1_W2=zeros(1000+M,1000);
+ENEy_TE1_W2=zeros(1000+M,1000);
+ENEz_TE1_W2=zeros(1000+M,1000);
+ENn_W1=zeros(1000+M,1000);
+ENn_W2=zeros(1000+M,1000);
+
+% Set original refractive index 
+for i=1:1:1000+M
+	for j=1:1:1000
+		ENn_W1(i,j)=1;
+		ENn_W2(i,j)=1;
+	end
+end
+
+for i=1:1:1000
+	for j=1:1:1000
+		% ENExyz_TE0_W1
+		ENEx_TE0_W1(i,j)=NEx_TE0_W1(i,j);
+		ENEy_TE0_W1(i,j)=NEy_TE0_W1(i,j);
+		ENEz_TE0_W1(i,j)=NEz_TE0_W1(i,j);
+		% ENExyz_TE0_W2
+		ENEx_TE0_W2(i+M,j)=NEx_TE0_W2(i,j);
+		ENEy_TE0_W2(i+M,j)=NEy_TE0_W2(i,j);
+		ENEz_TE0_W2(i+M,j)=NEz_TE0_W2(i,j);
+		% ENExyz_TE1_W2
+		ENEx_TE1_W2(i+M,j)=NEx_TE1_W2(i,j);
+		ENEy_TE1_W2(i+M,j)=NEy_TE1_W2(i,j);
+		ENEz_TE1_W2(i+M,j)=NEz_TE1_W2(i,j);
+		% NEn_W1 & nEn_W2
+		ENn_W1(i,j)=Nn_W1(i,j);
+		ENn_W2(i+M,j)=Nn_W2(i,j);
+	end
+end
+
+% TE0_W1 couple with TE0_W2
+X1Ex=conj(ENEx_TE0_W1).*(ENEx_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+X1Ey=conj(ENEy_TE0_W1).*(ENEy_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+X1Ez=conj(ENEz_TE0_W1).*(ENEz_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+
+% TE0_W1 couple with TE1_W2
+X2Ex=conj(ENEx_TE0_W1).*(ENEx_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+X2Ey=conj(ENEy_TE0_W1).*(ENEy_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+X2Ez=conj(ENEz_TE0_W1).*(ENEz_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+
+% Important component of coupling coefficient kappa
+% TE0_W1 couple with TE0_W2
+sumX1Ex=0;
+sumX1Ey=0;
+sumX1Ez=0;
+for i=1:1:1000+M
+	for j=1:1:1000
+		if ENn_W1(i,j)==3.4
+		sumX1Ex=sumX1Ex+X1Ex(i,j);
+		sumX1Ey=sumX1Ey+X1Ey(i,j);
+		sumX1Ez=sumX1Ez+X1Ez(i,j);
+		end
+	end
+end
+% TE0_W1 couple with TE1_W2
+sumX2Ex=0;
+sumX2Ey=0;
+sumX2Ez=0;
+for i=1:1:1000+M
+	for j=1:1:1000
+		if ENn_W1(i,j)==3.4
+		sumX2Ex=sumX2Ex+X2Ex(i,j);
+		sumX2Ey=sumX2Ey+X2Ey(i,j);
+		sumX2Ez=sumX2Ez+X2Ez(i,j);
+		end
+	end
+end
+
+%% Important component of coupling coefficient kappa.
+% TE0_W1 couple with TE0_W2
+k1(M-128)=abs(sumX1Ex+sumX1Ey+sumX1Ez);
+% TE0_W1 couple with TE1_W2
+k2(M-128)=abs(sumX2Ex+sumX2Ey+sumX2Ez);	
+
+% Calculate coupling coefficient kappa
+kappa1(M-128)=omega*eps_0/4*(n_s^2-n_0^2)*k1(M-128);
+kappa1(M-128)=kappa1(M-128)*10^-6; %transform to um^-1
+
+kappa2(M-128)=omega*eps_0/4*(n_s^2-n_0^2)*k2(M-128);
+kappa2(M-128)=kappa2(M-128)*10^-6; %transform to um^-1
+
+% Gap distance 		
+g(M-128)=M*dx-(0.3e-6+0.6e-6);	
+g=g*10^9; % transform to nm
+
+end
+
+% Plot the relation between gap and coupling coefficients.
+plot(g,kappa1);
+hold on;
+plot(g,kappa2,'r');
+% plot(g,kappa1./kappa2);
+
+% END
