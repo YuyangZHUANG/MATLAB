@@ -133,7 +133,7 @@ N_TE1_W2=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W2.*(abs(Ex_TE1_W2).^2+abs(Ey_TE1_W2).^
 
 % Creat extended matrix for multiplying e1 and (e2*), setting the extended number as M.
 % minimum M is 129, with gap distance 3nm.
-% Loop of M:
+% Begin loop of M.
 for M=129:1:229
 % Extend matrix (name ENE and ENn)
 ENEx_TE0_W1=zeros(1000+M,1000);
@@ -212,7 +212,8 @@ for i=1:1:1000+M
 		sumX2Ez=sumX2Ez+X2Ez(i,j);
 		end
 	end
-end
+end 
+% End loop of M.
 
 %% Important component of coupling coefficient kappa.
 % TE0_W1 couple with TE0_W2
