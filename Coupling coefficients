@@ -177,14 +177,14 @@ for i=1:1:1000
 end
 
 % TE0_W1 couple with TE0_W2
-X1Ex=conj(ENEx_TE0_W1).*(ENEx_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
-X1Ey=conj(ENEy_TE0_W1).*(ENEy_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
-X1Ez=conj(ENEz_TE0_W1).*(ENEz_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+X1Ex=(ENEx_TE0_W1).*(ENEx_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+X1Ey=(ENEy_TE0_W1).*(ENEy_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
+X1Ez=(ENEz_TE0_W1).*(ENEz_TE0_W2)*dx*dy*N_TE0_W1*N_TE0_W2;
 
 % TE0_W1 couple with TE1_W2
-X2Ex=conj(ENEx_TE0_W1).*(ENEx_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
-X2Ey=conj(ENEy_TE0_W1).*(ENEy_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
-X2Ez=conj(ENEz_TE0_W1).*(ENEz_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+X2Ex=(ENEx_TE0_W1).*(ENEx_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+X2Ey=(ENEy_TE0_W1).*(ENEy_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
+X2Ez=(ENEz_TE0_W1).*(ENEz_TE1_W2)*dx*dy*N_TE0_W1*N_TE1_W2;
 
 % Important component of coupling coefficient kappa
 % TE0_W1 couple with TE0_W2
@@ -193,11 +193,9 @@ sumX1Ey=0;
 sumX1Ez=0;
 for i=1:1:1000+M
 	for j=1:1:1000
-		if ENn_W1(i,j)==3.4
 		sumX1Ex=sumX1Ex+X1Ex(i,j);
 		sumX1Ey=sumX1Ey+X1Ey(i,j);
 		sumX1Ez=sumX1Ez+X1Ez(i,j);
-		end
 	end
 end
 % TE0_W1 couple with TE1_W2
@@ -206,11 +204,9 @@ sumX2Ey=0;
 sumX2Ez=0;
 for i=1:1:1000+M
 	for j=1:1:1000
-		if ENn_W1(i,j)==3.4
 		sumX2Ex=sumX2Ex+X2Ex(i,j);
 		sumX2Ey=sumX2Ey+X2Ey(i,j);
 		sumX2Ez=sumX2Ez+X2Ez(i,j);
-		end
 	end
 end 
 % End loop of M.
