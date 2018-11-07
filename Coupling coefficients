@@ -131,7 +131,7 @@ N_TE0_W1=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W1.*(abs(Ex_TE0_W1).^2+abs(Ey_TE0_W1).^
 N_TE0_W2=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W2.*(abs(Ex_TE0_W2).^2+abs(Ey_TE0_W2).^2+abs(Ez_TE0_W2).^2)*dx*dy))));
 N_TE1_W2=sqrt(2/(sqrt(eps_0/mu_0)*(sum(n_W2.*(abs(Ex_TE1_W2).^2+abs(Ey_TE1_W2).^2+abs(Ez_TE1_W2).^2)*dx*dy))));
 
-% Creat extended matrix for multiplying e1 and (e2*), setting the extended number as M.
+% Creat extended matrix for multiplying e1 and e2, setting the extended number as M.
 % minimum M is 129, with gap distance 3nm.
 % Begin loop of M.
 for M=129:1:229
