@@ -30,11 +30,11 @@ options=odeset('RelTol',1E-8,'AbsTol',1E-8);
 % Step 3: Calculate the equations using numerical solver ode45
 [t,A]=ode45(Eqns,[0 20],X0,options);
 % Step 4: Plot the power of A1(z), A2(z) and A3(z).
-plot(t,abs(A(:,1)).^2)
+plot(t,abs(A(:,1)).^2);
 hold on;
-plot(t,abs(A(:,2)).^2,'r')
+plot(t,abs(A(:,2)).^2,'r');
 hold on;
-plot(t,abs(A(:,3)).^2,'g--')
+plot(t,abs(A(:,3)).^2,'g--');
 
 % End
 
