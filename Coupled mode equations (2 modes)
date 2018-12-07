@@ -1,0 +1,34 @@
+% ---------------------------------------------------------------
+% MATLAB
+% This .txt file is to calculate coupled mode theory (2 modes).
+% Written by Yuyang ZHUANG.
+% Tanabe Lab at Keio University.
+% 2018/12/7.
+% ---------------------------------------------------------------
+
+% The coupled differential equations are as follows (2 modes)
+% dA1(z)/dz=-j*b1*A1(z)+j*K12*A2(z)
+% dA2(z)/dz=-j*b2*A2(z)+j*K21*A1(z)
+% K12=K21*=c
+
+% The equations above can be simplified as
+% dA1(z)/dz=-j*b1*A1(z)+j*c*A2(z)
+% dA2(z)/dz=-j*b2*A2(z)+j*c*A1(z)
+
+% Assume that b1=b2=27μm-1
+% c1=c2=0.1μm-1
+
+% Step 1: Set the coupled mode equations
+A=[-27i,0.1i;0.1i,-27i];
+Eqns=@(t,X) A*X;
+% Step 2: Set the innitial condition A1(0)=1, A2(0)=0.
+X0=[1;0];
+options=odeset('RelTol',1E-8,'AbsTol',1E-8);
+% Step 3: Calculate the equations using numerical solver ode45
+[t,A]=ode45(Eqns,[0 20],X0,options);
+% Step 4: Plot the power of A1(z) and A2(z).
+plot(t,abs(A(:,1)).^2);
+hold on;
+plot(t,abs(A(:,2)).^2,'r');
+
+% End
